@@ -1,0 +1,27 @@
+<h2>Add Room</h2>
+
+<form th:action="@{/owner/rooms/add}" th:object="${room}" method="post">
+
+    <input type="text" th:field="*{title}" placeholder="Title" required><br><br>
+    <input type="number" th:field="*{rent}" placeholder="Rent" required><br><br>
+
+    <select th:field="*{type}">
+        <option value="PG">PG</option>
+        <option value="ROOM">ROOM</option>
+        <option value="FLAT">FLAT</option>
+    </select><br><br>
+
+    <select th:field="*{sharing}">
+        <option value="SINGLE">Single</option>
+        <option value="SHARED">Shared</option>
+    </select><br><br>
+
+    <textarea th:field="*{description}" placeholder="Description"></textarea><br><br>
+
+    <select th:field="*{area.id}">
+        <option th:each="a : ${areas}" th:value="${a.id}" th:text="${a.name}"></option>
+    </select><br><br>
+
+    <button type="submit">Save Room</button>
+
+</form>

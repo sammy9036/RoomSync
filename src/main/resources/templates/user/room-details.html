@@ -1,0 +1,66 @@
+<h2>Room Details</h2>
+
+<p><b>Title:</b> <span th:text="${room.title}"></span></p>
+<p><b>Rent:</b> <span th:text="${room.rent}"></span></p>
+<p><b>Type:</b> <span th:text="${room.type}"></span></p>
+<p><b>Sharing:</b> <span th:text="${room.sharing}"></span></p>
+<p><b>Description:</b> <span th:text="${room.description}"></span></p>
+
+<hr>
+
+<h3>Owner Details</h3>
+
+<p><b>Name:</b> <span th:text="${room.owner.name}"></span></p>
+<p><b>Email:</b> <span th:text="${room.owner.email}"></span></p>
+
+<br>
+
+<a th:href="@{/user/chat/{id}(id=${room.owner.id})}">
+    Chat with Owner
+</a>
+
+<hr>
+<h3>Reviews</h3>
+
+<div th:if="${#lists.isEmpty(reviews)}">
+    <p>No reviews yet.</p>
+</div>
+
+<div th:each="r : ${reviews}">
+    <p>
+        ⭐ <b th:text="${r.rating}"></b>/5 <br>
+        <span th:text="${r.comment}"></span><br>
+        <small>By <span th:text="${r.user.name}"></span></small>
+    </p>
+    <hr>
+</div>
+
+
+<h3>Add Your Review</h3>
+
+<form th:action="@{/user/rooms/review}" method="post">
+
+    <input type="hidden" name="roomId" th:value="${room.id}">
+
+    <label>Rating:</label>
+    <select name="rating">
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Good</option>
+        <option value="3">3 - Average</option>
+        <option value="2">2 - Bad</option>
+        <option value="1">1 - Very Bad</option>
+    </select>
+
+    <br><br>
+
+    <textarea name="comment" placeholder="Write your review..." required></textarea>
+
+    <br><br>
+
+    <button type="submit">Submit Review</button>
+</form>
+
+
+
+<br><br>
+<a href="/user/rooms/search">Back</a>

@@ -1,0 +1,25 @@
+<h2>All Users</h2>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="u : ${users}">
+        <td th:text="${u.name}"></td>
+        <td th:text="${u.email}"></td>
+        <td th:text="${u.role.name}"></td>
+        <td th:text="${u.status}"></td>
+        <td>
+            <a th:if="${u.status == 'ACTIVE'}" th:href="@{/admin/block/{id}(id=${u.id})}">Block</a>
+            <a th:if="${u.status == 'BLOCKED'}" th:href="@{/admin/unblock/{id}(id=${u.id})}">Unblock</a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a href="/admin/dashboard">Back</a>

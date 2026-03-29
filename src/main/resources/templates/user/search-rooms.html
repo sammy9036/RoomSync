@@ -1,0 +1,19 @@
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Rent</th>
+        <th>Type</th>
+        <th>Sharing</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="r : ${rooms}">
+        <td th:text="${r.title}"></td>
+        <td th:text="${r.rent}"></td>
+        <td th:text="${r.type}"></td>
+        <td th:text="${r.sharing}"></td>
+        <td>
+            <a th:href="@{/user/rooms/view/{id}(id=${r.id})}">View</a>
+        </td>
+    </tr>
+</table>
