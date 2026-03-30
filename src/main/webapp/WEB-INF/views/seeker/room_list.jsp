@@ -1,61 +1,127 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.roomsync.entity.Room" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.*, com.roomsync.entity.*" %>
+<%
+    List<Room> rooms = (List<Room>) request.getAttribute("rooms");
+    List<City> cities = (List<City>) request.getAttribute("cities");
+    List<Area> areas = (List<Area>) request.getAttribute("areas");
+%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Available Rooms - RoomSync</title>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/layout.css">
-    <link rel="stylesheet" href="/css/components.css">
+    <title>Room Listings</title>
+    <link rel="stylesheet" href="/css/pages/room_list.css">
 </head>
+
 <body>
-    <jsp:include page="../components/header.jsp" />
 
-    <div class="container" style="margin-top: 20px;">
+<jsp:include page="/WEB-INF/views/components/header.jsp" />
+
+<div class="container">
+
+    <!-- ===================== SIDEBAR FILTERS ===================== -->
+    <aside class="filters">
+
+        <h3>Filters</h3>
+
+        <!-- City Filter -->
+        <label>City</label>
+        <select id="citySelect" onchange="loadAreas(this.value)">
+            <option value="">Select City</option>
+            <% if (cities != null) {
+                for (City c : cities) { %>
+                    <option value="<%= c.getId() %>"><%= c.getName() %></option>
+            <% }} %>
+        </select>
+
+        <!-- Area Filter -->
+        <label>Area</label>
+        <select id="areaSelect">
+            <option value="">Select Area</option>
+            <% if (areas != null) {
+                for (Area a : areas) { %>
+                    <option value="<%= a.getId() %>"><%= a.getName() %></option>
+            <% }} %>
+        </select>
+
+        <!-- Room Type -->
+        <label>Room Type</label>
+        <select id="typeSelect">
+            <option value="">All</option>
+            <option value="PG">PG</option>
+            <option value="ROOM">Room</option>
+            <option value="FLAT">Flat</option>
+        </select>
+
+        <!-- Sharing -->
+        <label>Sharing</label>
+        <select id="sharingSelect">
+            <option value="">Any</option>
+            <option value="SINGLE">Single</option>
+            <option value="SHARED">Shared</option>
+        </select>
+
+        <!-- Max Rent -->
+        <label>Max Rent</label>
+        <input type="number" id="maxRent" placeholder="Enter max rent">
+
+        <button onclick="applyFilters()">Apply Filters</button>
+    </aside>
+
+    <!-- ===================== ROOM LIST SECTION ===================== -->
+    <section class="room-list">
+
         <h2>Available Rooms</h2>
-        <table border="1" width="100%" cellpadding="10" style="border-collapse: collapse;">
-            <thead>
-                <tr style="background-color: #f4f4f4;">
-                    <th>Title</th>
-                    <th>Rent</th>
-                    <th>Type</th>
-                    <th>Sharing</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-            <%
-                List<Room> rooms = (List<Room>) request.getAttribute("rooms");
-                if (rooms != null && !rooms.isEmpty()) {
-                    Iterator<Room> it = rooms.iterator();
-                    while (it.hasNext()) {
-                        Room r = it.next();
-            %>
-                <tr>
-                    <td><%= r.getTitle() %></td>
-                    <td>₹<%= r.getRent() %></td>
-                    <td><%= r.getType() %></td>
-                    <td><%= r.getSharing() %></td>
-                    <td>
-                        <a href="/user/rooms/view/<%= r.getId() %>" class="btn-primary">View Details</a>
-                    </td>
-                </tr>
-            <%
-                    }
-                } else {
-            %>
-                <tr>
-                    <td colspan="5" style="text-align:center;">No rooms are currently available.</td>
-                </tr>
-            <% } %>
-            </tbody>
-        </table>
-    </div>
 
-    <jsp:include page="../components/footer.jsp" />
+        <% if (rooms == null || rooms.isEmpty()) { %>
+            <p>No rooms found.</p>
+
+        <% } else { 
+            for (Room r : rooms) { %>
+
+            <!-- ===================== ROOM CARD (Airbnb Style) ===================== -->
+            <div class="room-card">
+
+                <div class="image-box">
+                    <img src="/images/default-room.jpg" alt="Room Image">
+                </div>
+
+                <div class="details">
+
+                    <h3><%= r.getTitle() %></h3>
+
+                    <p class="location">
+                        <%= r.getArea().getName() %>, 
+                        <%= r.getArea().getCity().getName() %>
+                    </p>
+
+                    <p class="rent">
+                        ₹ <strong><%= r.getRent() %></strong> / month
+                    </p>
+
+                    <p class="info">
+                        Type: <%= r.getType() %> |
+                        Sharing: <%= r.getSharing() %>
+                    </p>
+
+                    <p class="desc">
+                        <%= r.getDescription().length() > 120 
+                            ? r.getDescription().substring(0, 120) + "..." 
+                            : r.getDescription() %>
+                    </p>
+
+                    <p class="owner">Posted by: <%= r.getOwner().getName() %></p>
+
+                    <a href="/seeker/room/<%= r.getId() %>" class="view-btn">View Details</a>
+
+                </div>
+
+            </div>
+        <% }} %>
+
+    </section>
+</div>
+
+<script src="/js/pages/main.js"></script>
+
 </body>
 </html>

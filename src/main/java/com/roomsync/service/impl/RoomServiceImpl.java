@@ -48,4 +48,10 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findByAreaId(areaId);
     }
 
+	@Override
+	public List<Room> getRoomsByOwner(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

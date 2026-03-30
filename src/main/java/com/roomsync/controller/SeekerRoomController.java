@@ -46,6 +46,8 @@ public class SeekerRoomController {
         return "seeker/room_list";
     }
     
+    
+    
     @GetMapping("/view/{id}")
     public String viewRoom(@PathVariable Long id, Model model) {
         Room room = roomService.findById(id).orElseThrow();

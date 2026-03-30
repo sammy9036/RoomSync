@@ -4,7 +4,14 @@ import com.roomsync.entity.Area;
 import com.roomsync.entity.Room;
 import com.roomsync.entity.User;
 import com.roomsync.service.AreaService;
+import com.roomsync.service.BookingService;
 import com.roomsync.service.RoomService;
+
+import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +61,28 @@ public class OwnerRoomController {
         return "owner/my-rooms";
     }
 
+    @Autowired
+    private BookingService bookingService;
+
+    @GetMapping("/bookings")
+    public String bookingRequests(Model model, Authentication authentication) {
+
+        User owner = ((com.roomsync.security.CustomUserDetails) authentication.getPrincipal()).getUser();
+
+        model.addAttribute("bookings", bookingService.getBookingsForOwner(owner.getId()));
+
+        return "owner/booking_requests";
+    }
+    
+    @GetMapping("/owner/dashboard")
+    public String ownerDashboard(HttpSession session, Model model) {
+        User owner = (User) session.getAttribute("user");    
+        List<Room> rooms = roomService.getRoomsByOwner(owner.getId());
+        model.addAttribute("rooms", rooms);
+        return "owner/dashboard";
+    }
+    
+    
     // Delete room
     @GetMapping("/delete/{id}")
     public String deleteRoom(@PathVariable Long id, Authentication authentication) {

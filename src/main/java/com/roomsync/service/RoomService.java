@@ -17,5 +17,7 @@ public interface RoomService {
     List<Room> findAll();
     List<Room> findByArea(Long areaId);
 
+	List<Room> getRoomsByOwner(Long id);
+
 
 }
