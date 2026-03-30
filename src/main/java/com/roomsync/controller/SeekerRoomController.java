@@ -22,7 +22,6 @@ public class SeekerRoomController {
     private final AreaService areaService;
     private final ReviewService reviewService;
 
-
     public SeekerRoomController(RoomService roomService, AreaService areaService, ReviewService reviewService) {
         this.roomService = roomService;
         this.areaService = areaService;
@@ -34,7 +33,8 @@ public class SeekerRoomController {
     public String searchPage(Model model) {
         model.addAttribute("areas", areaService.findByCity(1L)); // TEMP: Pune
         model.addAttribute("rooms", roomService.findAll());
-        return "user/search-rooms";
+        // Points to src/main/webapp/WEB-INF/views/seeker/room_list.jsp
+        return "seeker/room_list"; 
     }
 
     // Filter by area
@@ -42,7 +42,8 @@ public class SeekerRoomController {
     public String filterByArea(@RequestParam Long areaId, Model model) {
         model.addAttribute("areas", areaService.findByCity(1L));
         model.addAttribute("rooms", roomService.findByArea(areaId));
-        return "user/search-rooms";
+        // Points to src/main/webapp/WEB-INF/views/seeker/room_list.jsp
+        return "seeker/room_list";
     }
     
     @GetMapping("/view/{id}")
@@ -50,7 +51,8 @@ public class SeekerRoomController {
         Room room = roomService.findById(id).orElseThrow();
         model.addAttribute("room", room);
         model.addAttribute("reviews", reviewService.findByRoom(id));
-        return "user/room-details";
+        // Points to src/main/webapp/WEB-INF/views/seeker/room_detail.jsp
+        return "seeker/room_detail";
     }
 
     @PostMapping("/review")
@@ -62,11 +64,11 @@ public class SeekerRoomController {
     ) {
         User user = ((com.roomsync.security.CustomUserDetails) authentication.getPrincipal()).getUser();
 
-        // ✅ FETCH REAL ROOM FROM DB
+        // FETCH REAL ROOM FROM DB
         Room room = roomService.findById(roomId).orElseThrow();
 
         Review review = new Review();
-        review.setRoom(room);          // ✅ REAL managed entity
+        review.setRoom(room);
         review.setUser(user);
         review.setRating(rating);
         review.setComment(comment);
@@ -76,6 +78,4 @@ public class SeekerRoomController {
 
         return "redirect:/user/rooms/view/" + roomId;
     }
-
-
 }

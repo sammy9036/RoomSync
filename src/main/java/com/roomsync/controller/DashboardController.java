@@ -2,29 +2,31 @@ package com.roomsync.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DashboardController {
 
     @GetMapping("/admin/dashboard")
     public String adminDashboard() {
-        return "admin/dashboard";
+        // Points to src/main/webapp/WEB-INF/views/admin/dashboard.jsp
+        return "admin/dashboard"; 
     }
 
     @GetMapping("/owner/dashboard")
     public String ownerDashboard() {
+        // Points to src/main/webapp/WEB-INF/views/owner/dashboard.jsp
         return "owner/dashboard";
     }
 
     @GetMapping("/user/dashboard")
     public String userDashboard() {
-        return "user/dashboard";
+        // Points to src/main/webapp/WEB-INF/views/seeker/home.jsp
+        return "seeker/home";
     }
     
     @GetMapping("/user/profile")
     public String userProfile() {
-        return "user/profile";
+        // Points to src/main/webapp/WEB-INF/views/seeker/profile.jsp
+        return "seeker/profile";
     }
-
 }
