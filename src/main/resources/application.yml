@@ -13,6 +13,6 @@ spring:
         format_sql: true
 
   mvc:
-    view:
-      prefix: /jsp/
-      suffix: .jsp
+		view:
+		  prefix: /WEB-INF/views/
+		   suffix: .jsp
